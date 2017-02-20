@@ -15,7 +15,13 @@
 
 struct lottery_tasks_config {
 	int pid;
+	double min_exec;
+	double max_exec;
+	double min_inter_arrival;
+	double max_inter_arrival;
 	unsigned long long tickets;
+	double min_offset;
+	double max_offset;
 };
 
 pid_t lottery_tasks_pid [LOTTERY_TASKS_NUM];
@@ -35,10 +41,17 @@ void print_lottery_tasks_config(struct lottery_tasks_config *tasks, int num)
 	int i;
 	printf("\nLOTTERY TASKS CONFIG\n");
 	printf("pid\ttickets\n");
+	printf("pid\tmin_c\tmax_c\tmin_t\tmax_t\tticket\tmin_o\tmax_o\n");
 	for(i=0;i<num;i++){
-		printf("%d\t%llu\n",
+		printf("%d\t%f\t%f\t%f\t%f\t%llu\t%f\t%f\n",
 		tasks[i].pid,
-		tasks[i].tickets
+		tasks[i].min_exec,
+		tasks[i].max_exec,
+		tasks[i].min_inter_arrival,
+		tasks[i].max_inter_arrival,
+		tasks[i].tickets,
+		tasks[i].min_offset,
+		tasks[i].max_offset
 		);
 	}
 }
@@ -49,23 +62,61 @@ void clear_lottery_tasks_config_info(struct lottery_tasks_config *tasks, int num
 	
 	for(i=0;i<num;i++){
 		tasks[i].pid=0;
+		tasks[i].min_exec=0;
+		tasks[i].max_exec=0;
+		tasks[i].min_inter_arrival=0;
+		tasks[i].max_inter_arrival=0;
 		tasks[i].tickets=0;
+		tasks[i].min_offset=0;
+		tasks[i].max_offset=0;
 	}
 }
 void get_lottery_task_config_info(char * str, struct lottery_tasks_config *tasks,int *n)
 {
+
 	char *s ,*s1;
 	int i=0;
 	s = s1=str;
-	while(i<1){
+	while(i<7){
 		if(*s=='\t'){
 			*s='\0';
 			switch(i){
 				case 0:
 					tasks[*n].pid = atoi(s1);
 					s1=s+1;
-					tasks[*n].tickets = atoll(s1);
 					i++;
+				break;
+				case 1:
+					tasks[*n].min_exec = atof(s1);
+					s1=s+1;
+					i++;
+				break;
+				case 2:
+					tasks[*n].max_exec = atof(s1);
+					s1=s+1;
+					i++;
+				break;
+				case 3:
+					tasks[*n].min_inter_arrival = atof(s1);
+					s1=s+1;
+					i++;
+				break;
+				case 4:
+					tasks[*n].max_inter_arrival = atof(s1);
+					s1=s+1;
+					i++;
+				break;
+				case 5:
+					tasks[*n].tickets = atoll(s1);
+					s1=s+1;
+					i++;
+				break;
+				case 6:
+					tasks[*n].min_offset = atof(s1);
+					s1=s+1;
+					i++;
+					tasks[*n].max_offset = atof(s1);
+				break;
 
 			}
 
@@ -156,9 +207,15 @@ int main(int argc, char *argv[])
 		strcpy(arg[0],"lottery_task");
 
 		sprintf(arg[1],"%d",lottery_tasks_config[i].pid);
-		sprintf(arg[2],"%d",lottery_tasks_config[i].tickets);
-		sprintf(arg[3],"%ld",rand());
-		n=4;
+		sprintf(arg[2],"%f",lottery_tasks_config[i].min_exec);
+		sprintf(arg[3],"%f",lottery_tasks_config[i].max_exec);
+		sprintf(arg[4],"%f",lottery_tasks_config[i].min_inter_arrival);
+		sprintf(arg[5],"%f",lottery_tasks_config[i].max_inter_arrival);
+		sprintf(arg[6],"%llu",lottery_tasks_config[i].tickets);
+		sprintf(arg[7],"%f",lottery_tasks_config[i].min_offset);
+		sprintf(arg[8],"%f",lottery_tasks_config[i].max_offset);
+		sprintf(arg[9],"%ld",rand());
+		n=10;
 		for(k=0;k<n;k++){
 			parg[k]=arg[k];
 		}

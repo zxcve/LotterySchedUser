@@ -137,15 +137,18 @@ int main(int argc, char** argv) {
 	param.sched_priority = 1;
 
 	lottery_id=param.lottery_id=atoi(argv[1]);
-	param.tickets=atoll(argv[2]);
-	seed=atol(argv[3]);
+	min_exec_time=atof(argv[2]);
+	max_exec_time=atof(argv[3]);
+	min_inter_arrival_time=atof(argv[4]);
+	max_inter_arrival_time=atof(argv[5]);
+	param.tickets=atoll(argv[6]);
+	min_offset=atof(argv[7]);
+	max_offset=atof(argv[8]);
+	seed=atol(argv[9]);
 	srand(seed);
 
-	printf("Signal 1\n");
 	signal(SIGUSR1, start_task);
-	printf("Signal 2\n");
 	signal(SIGALRM, do_work);
-	printf("Signal 3\n");
 	signal(SIGUSR2, end_task);
 
 
