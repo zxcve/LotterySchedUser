@@ -67,7 +67,14 @@ int main(int argc, char *argv[])
 
 	while( (fgets(buffer, BUF_LEN, fd))!=NULL) {
 		if(strlen(buffer)>1){
-			tickets[i++] = atoll(buffer);
+			j = 0;
+			k = atoi(buffer);
+			while (buffer[j++] != ' '){};
+
+			printf("k is %d\n", k);
+			while (k--)
+				tickets[i++] = atoll(buffer + j);
+			printf("tickets is %llu\n", tickets[i-1]);
 		}
 	}
 
