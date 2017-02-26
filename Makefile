@@ -10,4 +10,4 @@ lottery_task: lottery_task.c
 	${CC} -ggdb -lrt -lm lottery_task.c -o lottery_task
 
 clean:
-	rm -f *.o *.a *~ lottery_task  lottery_task
+	rm -f *.o *.a *~ lottery_task  lottery_task lottery_system
