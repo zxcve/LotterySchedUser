@@ -42,7 +42,6 @@ int main(int argc, char** argv) {
 
 	param.tickets=atoll(argv[1]);
 
-	//printf("task %d tickets %d \n", getpid(), param.tickets);
 	signal(SIGUSR1, start_task);
 	signal(SIGUSR2, end_task);
 
