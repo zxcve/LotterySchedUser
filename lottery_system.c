@@ -76,6 +76,8 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	fclose(fd);
+
 	param.sched_priority = 99;
 
 	if (sched_setscheduler( 0, 1, (struct sched_param *)&param ) ==-1){
@@ -84,8 +86,16 @@ int main(int argc, char *argv[])
 
 	lottery_tasks_num = i;
 
-	fclose(fd);
+	fd  = fopen("/proc/lottery/latency", "wr");
 
+	if (fd == NULL) {
+		printf("proc file open failed\n");
+		return -1;
+	}
+
+	putc(0, fd);
+
+	fclose(fd);
 	sim_time.it_interval.tv_sec = 0;
 	sim_time.it_interval.tv_usec = 0;
 	sim_time.it_value.tv_sec = duration;
@@ -122,6 +132,20 @@ int main(int argc, char *argv[])
 	for(i=0;i<lottery_tasks_num;i++){
 		wait(NULL);
 	}
+
+
+	fd  = fopen("/proc/lottery/latency", "r");
+
+	if (fd == NULL) {
+		printf("proc file open failed\n");
+		return -1;
+	}
+
+	while( (fgets(buffer, BUF_LEN, fd))!=NULL) {
+		printf("%s", buffer);
+	}
+
+	fclose(fd);
 
 	printf("All tasks have finished properly!!!\n");
 	printf("##############################################################\n");
