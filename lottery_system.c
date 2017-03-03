@@ -134,9 +134,9 @@ int main(int argc, char *argv[])
 		wait(NULL);
 	}
 
-	printf("##############################################################\n\n");
+	printf("##############################################################\n");
 
-	printf("Statistics\n");
+	printf("Statistics\n\n");
 	fd  = fopen("/proc/lottery/stats", "r");
 
 	if (fd == NULL) {
