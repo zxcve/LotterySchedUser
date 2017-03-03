@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
 
 	lottery_tasks_num = i;
 
-	fd  = fopen("/proc/lottery/latency", "wr");
+	fd  = fopen("/proc/lottery/stats", "wr");
 
 	if (fd == NULL) {
 		printf("proc file open failed\n");
@@ -120,21 +120,24 @@ int main(int argc, char *argv[])
 			perror("Error: execv\n");
 			exit(0);
 		}
-		sleep(1);
+		usleep(100);
 	}
 
 	signal(SIGALRM, end_simulation);
 	setitimer(ITIMER_REAL, &sim_time, NULL);
 
 	start_simulation();
+
 	pause();
 
 	for(i=0;i<lottery_tasks_num;i++){
 		wait(NULL);
 	}
 
+	printf("##############################################################\n\n");
 
-	fd  = fopen("/proc/lottery/latency", "r");
+	printf("Statistics\n");
+	fd  = fopen("/proc/lottery/stats", "r");
 
 	if (fd == NULL) {
 		printf("proc file open failed\n");
